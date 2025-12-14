@@ -11,19 +11,19 @@ Below are examples of the plugin in action:
 
 - **Without Zoom:**
 
-![Manga without zoom](img/Img1.png)
+<img src="img/Img1.png" alt="Manga without zoom" width="400">
 
 - **With Zoom:**
 
-![Manga with zoom](img/Img2.png)
+<img src="img/Img2.png" alt="Manga with zoom" width="400">
 
 - **Plugin Menu:**
 
-![Plugin Menu](img/Menu1.png)
+<img src="img/Menu1.png" alt="Plugin Menu" width="400">
 
 - **Plugin Settings:**
 
-![Plugin Settings](img/Menu2.png)
+<img src="img/Menu2.png" alt="Plugin Settings" width="400">
 
 ---
 
