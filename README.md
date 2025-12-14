@@ -1,7 +1,7 @@
 # Maximun Plugin for KOReader
 
 ## Overview
-Maximun is a plugin designed to enhance the manga reading experience on KOReader. It introduces a unique grid-based zoom functionality, making it easier to focus on specific sections of a manga page. The plugin is compatible with CBZ, CBR and PDF formats.
+Maximun is a plugin designed to enhance the manga reading experience on KOReader. It introduces a grid-based zoom functionality and automatic page rotation for landscape pages. Compatible with CBZ, CBR and PDF formats.
 
 ---
 
@@ -20,18 +20,31 @@ Below are examples of the plugin in action:
 ---
 
 ## Features
-- **Grid View**: Divides the screen into four quadrants for easy navigation.
-- 🔍 **Zoom Functionality**: Use a two-finger tap on any quadrant to zoom it to fullscreen.
-- **Toggle Grid Mode**: Enable or disable the grid mode as needed.
-- **Supported Formats**: Works seamlessly with CBZ, CBR and PDF files.
+- **Grid View**: Divides the screen into four quadrants (2x2) for easy navigation.
+- **Zoom Functionality**: Two-finger tap on any quadrant to zoom it to fullscreen.
+- **Auto-rotate**: Automatically rotates landscape pages to landscape orientation.
+- **Rotation Direction**: Choose between clockwise (90°) or counter-clockwise (270°) rotation.
+- **Persistent Settings**: Hold any option to save it as default.
+- **Toggle Modes**: Enable or disable grid mode and auto-rotate independently.
+- **Supported Formats**: Works with CBZ, CBR and PDF files.
 
 ---
 
 ## How to Use
-1. **Enable the Plugin**: The plugin is automatically registered in the KOReader main menu.
-2. **Activate Grid Mode**: Open a CBZ, CBR or PDF file and enable grid mode from the menu.
-3. **Zoom In/Out**: Perform a two-finger tap on any quadrant to zoom in. Tap again to return to the grid view.
-4. **Disable Grid Mode**: Use the menu option to turn off grid mode.
+
+### Grid Mode
+1. Open a CBZ, CBR or PDF file.
+2. Enable grid mode from the menu (Maximum > Enable Grid Mode).
+3. Two-finger tap on any quadrant to zoom in.
+4. Single tap or two-finger tap again to return to normal view.
+
+### Auto-rotate
+1. Enable auto-rotate from the menu (Maximum > Auto-rotate landscape pages).
+2. Choose rotation direction (Maximum > Rotation direction).
+3. Landscape pages will automatically rotate when navigating.
+
+### Save Defaults
+- Hold any option to save it as the default setting.
 
 ---
 
@@ -43,12 +56,31 @@ Below are examples of the plugin in action:
 
 ## Menu Options
 - **Enable Grid Mode**: Activates the grid view for supported files.
-- ℹ️ **About**: Displays information about the plugin and usage instructions.
+- **Auto-rotate landscape pages**: Automatically rotates landscape pages.
+- **Rotation direction**: Choose clockwise or counter-clockwise rotation.
+- **About**: Displays information about the plugin.
+
+---
+
+## File Structure
+```
+maximun.koplugin/
+├── _meta.lua       # Plugin metadata
+├── main.lua        # Main plugin coordinator
+├── autorotate.lua  # Auto-rotation module
+├── grid.lua        # Grid zoom module
+├── menu.lua        # Menu module
+└── settings.lua    # Persistent settings module
+```
 
 ---
 
 ## Limitations
-- ⚠️ Only supports CBZ, CBR and PDF files.
+- Only supports CBZ, CBR and PDF files.
 - Requires a touch-enabled device.
 
 ---
+
+## Credits
+- Grid functionality by @shac0x
+- Auto-rotate based on [koreader-autorotate](https://github.com/Extraltodeus/koreader-autorotate) by @Extraltodeus
