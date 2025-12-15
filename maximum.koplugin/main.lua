@@ -9,6 +9,7 @@ local InputContainer = require("ui/widget/container/inputcontainer")
 local Settings = require("settings")
 local AutoRotate = require("autorotate")
 local Grid = require("grid")
+local PageSplit = require("pagesplit")
 local Menu = require("menu")
 
 local SUPPORTED_EXTENSIONS = {
@@ -32,6 +33,7 @@ function Maximum:onReaderReady()
         return self:onGridGesture(quadrant, ges)
     end)
     AutoRotate:init(Settings)
+    PageSplit:init(self.ui, Settings)
 end
 
 function Maximum:isComic()
@@ -44,7 +46,22 @@ end
 function Maximum:onPageUpdate(pageno)
     if self:isComic() then
         AutoRotate:onPageUpdate(self.ui.document, pageno)
+        PageSplit:onPageUpdate(self.ui.document, pageno)
     end
+end
+
+function Maximum:onGotoNextPos()
+    if self:isComic() and PageSplit.enabled then
+        return PageSplit:onGotoNextPage()
+    end
+    return false
+end
+
+function Maximum:onGotoPreviousPos()
+    if self:isComic() and PageSplit.enabled then
+        return PageSplit:onGotoPrevPage()
+    end
+    return false
 end
 
 function Maximum:onGridGesture(quadrant, ges)
@@ -53,7 +70,7 @@ function Maximum:onGridGesture(quadrant, ges)
 end
 
 function Maximum:addToMainMenu(menu_items)
-    menu_items.maximum = Menu:build(self, Grid, AutoRotate, Settings)
+    menu_items.maximum = Menu:build(self, Grid, AutoRotate, PageSplit, Settings)
 end
 
 function Maximum:onCloseDocument()
@@ -62,6 +79,7 @@ function Maximum:onCloseDocument()
         AutoRotate:restorePortrait()
     end
     AutoRotate:reset()
+    PageSplit:reset()
 end
 
 return Maximum

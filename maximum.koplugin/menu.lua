@@ -16,7 +16,7 @@ function Menu:showMessage(text, timeout)
     })
 end
 
-function Menu:build(plugin, Grid, AutoRotate, Settings)
+function Menu:build(plugin, Grid, AutoRotate, PageSplit, Settings)
     local self_menu = self
     return {
         text = _("Maximum"),
@@ -45,6 +45,9 @@ function Menu:build(plugin, Grid, AutoRotate, Settings)
                 checked_func = function() return AutoRotate.enabled end,
                 callback = function()
                     local enabled = AutoRotate:toggle()
+                    if enabled and PageSplit.enabled then
+                        PageSplit:toggle()
+                    end
                     self_menu:showMessage(enabled
                         and "Auto-rotate ON\nLandscape pages will rotate automatically"
                         or "Auto-rotate OFF")
@@ -86,13 +89,31 @@ function Menu:build(plugin, Grid, AutoRotate, Settings)
                 },
             },
             {
+                text = _("Split landscape pages"),
+                checked_func = function() return PageSplit.enabled end,
+                callback = function()
+                    local enabled = PageSplit:toggle()
+                    if enabled and AutoRotate.enabled then
+                        AutoRotate:toggle()
+                    end
+                    self_menu:showMessage(enabled
+                        and "Page Split ON\nLandscape pages will show in two halves"
+                        or "Page Split OFF")
+                end,
+                hold_callback = function()
+                    Settings:set("pagesplit_enabled", PageSplit.enabled)
+                    self_menu:showMessage("Page Split default: " .. (PageSplit.enabled and "ON" or "OFF"))
+                end,
+            },
+            {
                 text = _("About"),
                 callback = function()
                     self_menu:showMessage(
                         "Maximum Plugin\n\n" ..
                         "2-FINGER TAP to zoom quadrant.\n" ..
                         "TAP to return.\n" ..
-                        "Auto-rotates landscape pages.\n\n" ..
+                        "Auto-rotates landscape pages.\n" ..
+                        "Split landscape into two pages.\n\n" ..
                         "Hold option to set as default.\n\n" ..
                         "Supports: CBZ, CBR, PDF\n\n" ..
                         "@shac0x"

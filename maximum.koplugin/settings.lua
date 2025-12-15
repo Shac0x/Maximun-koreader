@@ -14,6 +14,7 @@ local DEFAULTS = {
     grid_enabled = true,
     autorotate_enabled = true,
     rotate_clockwise = true,
+    pagesplit_enabled = false,
 }
 
 function Settings:load()
