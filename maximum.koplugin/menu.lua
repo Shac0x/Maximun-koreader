@@ -41,16 +41,36 @@ function Menu:build(plugin, Grid, AutoRotate, PageSplit, Settings)
                 end,
             },
             {
+                text = _("Grid RTL Mode (Right-to-Left)"),
+                checked_func = function() return Grid.rtl_enabled end,
+                callback = function()
+                    local enabled = Grid:toggleRTL()
+                    self_menu:showMessage(enabled
+                        and "RTL Mode ON\nReading direction: Right-to-Left"
+                        or "RTL Mode OFF\nReading direction: Left-to-Right")
+                end,
+                hold_callback = function()
+                    Settings:set("grid_rtl_enabled", Grid.rtl_enabled)
+                    self_menu:showMessage("RTL Mode default: " .. (Grid.rtl_enabled and "ON" or "OFF"))
+                end,
+            },
+            {
                 text = _("Auto-rotate landscape pages"),
                 checked_func = function() return AutoRotate.enabled end,
                 callback = function()
                     local enabled = AutoRotate:toggle()
-                    if enabled and PageSplit.enabled then
-                        PageSplit:toggle()
+                    local msg = ""
+                    if enabled then
+                        if PageSplit.enabled then
+                            PageSplit:toggle()
+                            msg = "Auto-rotate ON\nPage Split disabled\nLandscape pages will rotate automatically"
+                        else
+                            msg = "Auto-rotate ON\nLandscape pages will rotate automatically"
+                        end
+                    else
+                        msg = "Auto-rotate OFF"
                     end
-                    self_menu:showMessage(enabled
-                        and "Auto-rotate ON\nLandscape pages will rotate automatically"
-                        or "Auto-rotate OFF")
+                    self_menu:showMessage(msg)
                 end,
                 hold_callback = function()
                     Settings:set("autorotate_enabled", AutoRotate.enabled)
@@ -93,12 +113,18 @@ function Menu:build(plugin, Grid, AutoRotate, PageSplit, Settings)
                 checked_func = function() return PageSplit.enabled end,
                 callback = function()
                     local enabled = PageSplit:toggle()
-                    if enabled and AutoRotate.enabled then
-                        AutoRotate:toggle()
+                    local msg = ""
+                    if enabled then
+                        if AutoRotate.enabled then
+                            AutoRotate:toggle()
+                            msg = "Page Split ON\nAuto-rotate disabled\nLandscape pages will show in two halves"
+                        else
+                            msg = "Page Split ON\nLandscape pages will show in two halves"
+                        end
+                    else
+                        msg = "Page Split OFF"
                     end
-                    self_menu:showMessage(enabled
-                        and "Page Split ON\nLandscape pages will show in two halves"
-                        or "Page Split OFF")
+                    self_menu:showMessage(msg)
                 end,
                 hold_callback = function()
                     Settings:set("pagesplit_enabled", PageSplit.enabled)

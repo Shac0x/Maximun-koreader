@@ -12,6 +12,7 @@ local settings = nil
 
 local DEFAULTS = {
     grid_enabled = true,
+    grid_rtl_enabled = false,
     autorotate_enabled = true,
     rotate_clockwise = true,
     pagesplit_enabled = false,

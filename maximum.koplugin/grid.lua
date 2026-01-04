@@ -11,8 +11,10 @@ local Screen = Device.screen
 
 local Grid = {
     enabled = true,
+    rtl_enabled = false,
     expanded_cell = nil,
     original_zoom_mode = nil,
+    original_page_turn_direction = nil,
     ui = nil,
 }
 
@@ -26,13 +28,16 @@ local QUADRANTS = {
 function Grid:init(ui, Settings)
     self.ui = ui
     self.enabled = Settings:get("grid_enabled")
+    self.rtl_enabled = Settings:get("grid_rtl_enabled") or false
     self.expanded_cell = nil
     self.original_zoom_mode = nil
+    self.original_page_turn_direction = nil
 end
 
 function Grid:reset()
     self.expanded_cell = nil
     self.original_zoom_mode = nil
+    self.original_page_turn_direction = nil
 end
 
 function Grid:setupTouchZones(handler)
@@ -66,6 +71,16 @@ function Grid:expand(cell)
 
     self.original_zoom_mode = zooming.zoom_mode
     self.expanded_cell = cell
+
+    -- Save and set RTL direction if enabled
+    if self.rtl_enabled then
+        local configurable = self.ui.document and self.ui.document.configurable
+        if configurable then
+            self.original_page_turn_direction = configurable.writing_direction
+            configurable.writing_direction = 1 -- 1 = RTL in KOReader
+            self.ui:handleEvent(Event:new("RedrawCurrentPage"))
+        end
+    end
 
     local col = (cell - 1) % 2
     local row = math.floor((cell - 1) / 2)
@@ -105,6 +120,15 @@ function Grid:collapse()
 
     self.expanded_cell = nil
 
+    -- Restore original page turn direction if RTL was enabled
+    if self.rtl_enabled and self.original_page_turn_direction ~= nil then
+        local configurable = self.ui.document and self.ui.document.configurable
+        if configurable then
+            configurable.writing_direction = self.original_page_turn_direction
+            self.original_page_turn_direction = nil
+        end
+    end
+
     if self.original_zoom_mode then
         self.ui:handleEvent(Event:new("SetZoomMode", self.original_zoom_mode))
         self.original_zoom_mode = nil
@@ -142,6 +166,11 @@ function Grid:toggle()
         self:collapse()
     end
     return self.enabled
+end
+
+function Grid:toggleRTL()
+    self.rtl_enabled = not self.rtl_enabled
+    return self.rtl_enabled
 end
 
 return Grid
